@@ -21,6 +21,9 @@ body{
   background-color: #fff;
   margin: 85px auto 0;
   box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center-align items horizontally */
 }
 
 .container .input-field{
@@ -137,3 +140,32 @@ textarea::-webkit-scrollbar{
   filter: brightness(120%);
 }
 
+/* Fetch Todos Button */
+.fetch-buttons {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 20px; /* Space between buttons */
+}
+
+.fetch-todos-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #28a745;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  display: inline-block;
+  margin: 10px 0;
+}
+
+.fetch-todos-button:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+.fetch-todos-button:active {
+  background-color: #1e7e34;
+  transform: scale(0.95);
+}
