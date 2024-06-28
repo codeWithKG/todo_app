@@ -1,3 +1,40 @@
+const fetchTodosAsyncButton = document.getElementById("btn-todos-async");
+
+// Check if the browser supports Web Workers
+if (window.Worker) {
+  const todoWorker = new Worker('worker.js');
+
+  fetchTodosAsyncButton.addEventListener('click', () => {
+    // Send a message to the worker to fetch todos
+    todoWorker.postMessage('fetchTodos');
+  });
+
+  todoWorker.onmessage = function(event) {
+    const { status, todos, message } = event.data;
+
+    if (status === 'success') {
+      // Clear the current todo list
+      todoList.innerHTML = '';
+
+      // Iterate over the fetched todos and add them to the DOM
+      todos.forEach(todo => {
+        let liTag = `   <li class="list pending" onclick="handleStatus(this)">
+          <input type="checkbox" ${todo.completed ? 'checked' : ''}>
+          <span class="task">${todo.title}</span>
+          <i class="fa-solid fa-trash"></i>
+        </li>`;
+        todoList.insertAdjacentHTML('beforeend', liTag);
+      });
+    } else if (status === 'error') {
+      console.error('Failed to fetch todos:', message);
+      alert(`Error: ${message}`);
+    }
+  };
+} else {
+  console.error('Web Workers are not supported in this browser.');
+}
+
+
 // ------------------------
 // Promises and Async/Await
 // ------------------------
@@ -36,27 +73,27 @@ function fetchTodosSync() {
 
 
 // With async
-const fetchTodosAsyncButton = document.getElementById("btn-todos-async");
+// const fetchTodosAsyncButton = document.getElementById("btn-todos-async");
 
-fetchTodosAsyncButton.addEventListener("click", () => {
-  fetchTodosAsync();
-});
+// fetchTodosAsyncButton.addEventListener("click", () => {
+//   fetchTodosAsync();
+// });
 
-async function fetchTodosAsync() {
-  // Long-running asynchronous operation
-  await new Promise(resolve => setTimeout(resolve, 5000));
+// async function fetchTodosAsync() {
+//   // Long-running asynchronous operation
+//   await new Promise(resolve => setTimeout(resolve, 5000));
 
-  const response = await fetch("https://jsonplaceholder.typicode.com/todos?_limit=5");
-  const todos = await response.json();
-  todos.forEach(todo => {
-    let liTag = `   <li class="list pending" onclick="handleStatus(this)">
-      <input type="checkbox" ${todo.completed ? "checked" : ""}>
-      <span class="task">${todo.title}</span>
-      <i class="fa-solid fa-trash"></i>
-    </li>`;
-    todoList.insertAdjacentHTML("beforeend", liTag);
-  });
-}
+//   const response = await fetch("https://jsonplaceholder.typicode.com/todos?_limit=5");
+//   const todos = await response.json();
+//   todos.forEach(todo => {
+//     let liTag = `   <li class="list pending" onclick="handleStatus(this)">
+//       <input type="checkbox" ${todo.completed ? "checked" : ""}>
+//       <span class="task">${todo.title}</span>
+//       <i class="fa-solid fa-trash"></i>
+//     </li>`;
+//     todoList.insertAdjacentHTML("beforeend", liTag);
+//   });
+// }
 
 
 
